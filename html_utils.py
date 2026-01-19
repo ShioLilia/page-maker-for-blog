@@ -64,7 +64,8 @@ def replace_content_safe(template, class_name, new_content, escape_html=True):
     if escape_html:
         new_content = escape(new_content)
     
-    pattern = rf'(<p\s+class="{re.escape(class_name)}">)(.*?)(</p>)'
+    # Pattern handles both double and single quotes
+    pattern = rf'(<p\s+class=["\']?{re.escape(class_name)}["\']?>)(.*?)(</p>)'
     
     def replacement_func(match):
         return match.group(1) + new_content + match.group(3)
