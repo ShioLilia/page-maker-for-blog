@@ -85,8 +85,11 @@ def test_html_generation():
     
     for class_name, new_content in user_inputs.items():
         pattern = rf'(<p\s+class="{re.escape(class_name)}">)(.*?)(</p>)'
-        replacement = rf'\1{new_content}\3'
-        result_html = re.sub(pattern, replacement, result_html, flags=re.DOTALL)
+        
+        def replacement_func(match):
+            return match.group(1) + new_content + match.group(3)
+        
+        result_html = re.sub(pattern, replacement_func, result_html, flags=re.DOTALL)
     
     # Save result
     output_path = os.path.join(output_dir, 'test_output.html')
