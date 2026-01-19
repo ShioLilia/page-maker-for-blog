@@ -6,45 +6,7 @@ Test script for page_maker.py - validates template parsing functionality
 
 import os
 import sys
-from html.parser import HTMLParser
-
-
-class PTagParser(HTMLParser):
-    """Parser to find <p> tags with class attribute"""
-    
-    def __init__(self):
-        super().__init__()
-        self.p_tags = []
-        self.current_p_class = None
-        self.current_p_start = None
-        self.capture_content = False
-        self.current_content = []
-        
-    def handle_starttag(self, tag, attrs):
-        if tag == 'p':
-            for attr_name, attr_value in attrs:
-                if attr_name == 'class' and attr_value:
-                    self.current_p_class = attr_value
-                    self.current_p_start = self.getpos()
-                    self.capture_content = True
-                    self.current_content = []
-                    break
-    
-    def handle_endtag(self, tag):
-        if tag == 'p' and self.capture_content:
-            content = ''.join(self.current_content)
-            self.p_tags.append({
-                'class': self.current_p_class,
-                'content': content,
-                'start_pos': self.current_p_start
-            })
-            self.capture_content = False
-            self.current_p_class = None
-            self.current_content = []
-    
-    def handle_data(self, data):
-        if self.capture_content:
-            self.current_content.append(data)
+from html_utils import PTagParser
 
 
 def test_template_parsing():

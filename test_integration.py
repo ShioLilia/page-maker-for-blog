@@ -5,46 +5,7 @@ Integration test for page_maker.py - simulates HTML generation
 """
 
 import os
-import re
-from html.parser import HTMLParser
-
-
-class PTagParser(HTMLParser):
-    """Parser to find <p> tags with class attribute"""
-    
-    def __init__(self):
-        super().__init__()
-        self.p_tags = []
-        self.current_p_class = None
-        self.current_p_start = None
-        self.capture_content = False
-        self.current_content = []
-        
-    def handle_starttag(self, tag, attrs):
-        if tag == 'p':
-            for attr_name, attr_value in attrs:
-                if attr_name == 'class' and attr_value:
-                    self.current_p_class = attr_value
-                    self.current_p_start = self.getpos()
-                    self.capture_content = True
-                    self.current_content = []
-                    break
-    
-    def handle_endtag(self, tag):
-        if tag == 'p' and self.capture_content:
-            content = ''.join(self.current_content)
-            self.p_tags.append({
-                'class': self.current_p_class,
-                'content': content,
-                'start_pos': self.current_p_start
-            })
-            self.capture_content = False
-            self.current_p_class = None
-            self.current_content = []
-    
-    def handle_data(self, data):
-        if self.capture_content:
-            self.current_content.append(data)
+from html_utils import PTagParser, replace_content_safe
 
 
 def test_html_generation():
@@ -84,12 +45,7 @@ def test_html_generation():
     result_html = template_content
     
     for class_name, new_content in user_inputs.items():
-        pattern = rf'(<p\s+class="{re.escape(class_name)}">)(.*?)(</p>)'
-        
-        def replacement_func(match):
-            return match.group(1) + new_content + match.group(3)
-        
-        result_html = re.sub(pattern, replacement_func, result_html, flags=re.DOTALL)
+        result_html = replace_content_safe(result_html, class_name, new_content)
     
     # Save result
     output_path = os.path.join(output_dir, 'test_output.html')
