@@ -6,7 +6,7 @@ Blog Page Maker - A tool to create HTML pages from templates
 
 import os
 import tkinter as tk
-from tkinter import ttk, messagebox, scrolledtext
+from tkinter import ttk, messagebox
 from html_utils import PTagParser, replace_content_safe
 
 

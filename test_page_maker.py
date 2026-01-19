@@ -40,7 +40,10 @@ def test_template_parsing():
             print(f"  Found {len(parser.p_tags)} editable field(s):")
             
             for field in parser.p_tags:
-                print(f"    - class=\"{field['class']}\": {field['content'][:50]}...")
+                content_display = field['content'][:50]
+                if len(field['content']) > 50:
+                    content_display += '...'
+                print(f"    - class=\"{field['class']}\": {content_display}")
             
             if len(parser.p_tags) == 0:
                 print("  ⚠️  Warning: No editable fields found in this template")

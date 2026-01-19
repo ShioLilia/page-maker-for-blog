@@ -5,6 +5,7 @@ Utility functions for page maker - shared HTML parsing and replacement logic
 """
 
 import re
+from html import escape
 from html.parser import HTMLParser
 
 
@@ -46,7 +47,7 @@ class PTagParser(HTMLParser):
             self.current_content.append(data)
 
 
-def replace_content_safe(template, class_name, new_content):
+def replace_content_safe(template, class_name, new_content, escape_html=True):
     """
     Safely replace content in a <p class="..."> tag.
     
@@ -54,10 +55,15 @@ def replace_content_safe(template, class_name, new_content):
         template: HTML template string
         class_name: CSS class name of the <p> tag
         new_content: New content to insert
+        escape_html: If True, escapes HTML entities to prevent XSS (default: True)
         
     Returns:
         Modified HTML string with content replaced
     """
+    # Escape HTML to prevent XSS vulnerabilities
+    if escape_html:
+        new_content = escape(new_content)
+    
     pattern = rf'(<p\s+class="{re.escape(class_name)}">)(.*?)(</p>)'
     
     def replacement_func(match):

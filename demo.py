@@ -139,7 +139,10 @@ def generate_tech_note_example():
     
     print("\nCustom content:")
     for key, value in custom_content.items():
-        print(f"  - {key}: \"{value[:50]}...\"")
+        display_value = value[:50]
+        if len(value) > 50:
+            display_value += '...'
+        print(f"  - {key}: \"{display_value}\"")
     
     # Replace content
     result_html = template_content
