@@ -51,12 +51,17 @@ python3 page_maker.py
 
 ```
 page-maker-for-blog/
-├── page_maker.py          # 主程序
-├── templates/             # HTML模板目录
-│   ├── blog_post.html     # 博客文章模板
+├── page_maker.py           # 主程序
+├── demo.py                 # 演示脚本
+├── templates/              # HTML模板目录
+│   ├── blog_post.html      # 博客文章模板
 │   ├── simple_article.html # 简单文章模板
-│   └── tech_note.html     # 技术笔记模板
-└── output/                # 生成的HTML文件保存目录
+│   └── tech_note.html      # 技术笔记模板
+├── tests/                  # 测试目录
+│   ├── test_page_maker.py  # 单元测试：page_maker
+│   └── test_integration.py # 集成测试
+├── output/                 # 生成的HTML文件保存目录
+└── .gitignore              # Git 忽略配置
 ```
 
 ## 添加自定义模板
